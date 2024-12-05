@@ -1,8 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'package:qlbh_eco_food_admin/app/binding/global_binding.dart';
 import 'package:qlbh_eco_food_admin/app/ui/splash_screen.dart';
 import 'package:qlbh_eco_food_admin/features/home_page/home_page_binding.dart';

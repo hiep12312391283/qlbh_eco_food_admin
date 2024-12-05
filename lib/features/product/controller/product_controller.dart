@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:intl/intl.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../model/product_model.dart';
@@ -74,21 +74,18 @@ class ProductController extends GetxController {
 
       final querySnapshot = await _firestore.collection('products').get();
       final List<Product> loadedProducts = querySnapshot.docs.map((doc) {
-        final data = doc.data();
+        final data = doc.data() ?? {};
         return Product(
-          id: data['id'],
-          name: data['name'],
-          category: data['category'],
-          price: double.parse(data['price'].toString()),
-          description: data['description'],
-          stock: int.parse(data['stock'].toString()),
-          entryDate: data['entryDate'] is Timestamp
-              ? (data['entryDate'] as Timestamp).toDate()
-              : DateTime.parse(data['entryDate']),
+          id: data['id'] ?? '', // Default to empty string if null
+          name: data['name'] ?? '',
+          categoryId: data['categoryId'] ?? '',
+          price: double.tryParse(data['price']?.toString() ?? '') ?? 0.0,
+          description: data['description'] ?? '',
+          stock: int.tryParse(data['stock']?.toString() ?? '') ?? 0,
           expiryDate: data['expiryDate'] is Timestamp
               ? (data['expiryDate'] as Timestamp).toDate()
-              : DateTime.parse(data['expiryDate']),
-          imageBase64: data['imageBase64'],
+              : DateTime.tryParse(data['expiryDate'] ?? '') ?? DateTime.now(),
+          imageBase64: data['imageBase64'] ?? '',
           documentId: doc.id,
         );
       }).toList();
@@ -189,11 +186,11 @@ class ProductController extends GetxController {
           addProduct(Product(
             id: idController.text,
             name: nameController.text,
-            category: categoryController.text,
+            categoryId: categoryController.text,
             price: double.parse(priceController.text),
             description: descriptionController.text,
             stock: int.parse(stockController.text),
-            entryDate: DateTime.now(),
+
             expiryDate: expiryDate,
             imageBase64: imageBase64,
           ));
@@ -211,6 +208,7 @@ class ProductController extends GetxController {
       }
     }
   }
+
   void updateSearchQuery(String query) {
     searchQuery.value = query;
     products.refresh();

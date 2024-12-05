@@ -1,10 +1,7 @@
 import 'dart:convert';
-import 'package:intl/intl.dart';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
+import 'package:intl/intl.dart';
 import 'package:qlbh_eco_food_admin/base/const/colors.dart';
 import 'package:qlbh_eco_food_admin/features/product/controller/product_controller.dart';
 import 'package:qlbh_eco_food_admin/features/product_detail/view/product_detail_page.dart';
@@ -73,7 +70,7 @@ class SearchProductPage extends GetView<ProductController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Mã sản phẩm: ${product.id}'),
-                      Text('Loại: ${product.category}'),
+                      Text('Loại: ${product.categoryId}'),
                       Text('Giá: ${product.price.toStringAsFixed(2)} VND'),
                       Text('Kho: ${product.stock}'),
                       Text(
@@ -94,8 +91,6 @@ class SearchProductPage extends GetView<ProductController> {
                         icon: const Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
                           if (product.documentId != null) {
-                            // _showDeleteConfirmationDialog(
-                            //     context, product.documentId!);
                           } else {
                             Get.snackbar(
                                 'Lỗi', 'Không thể xác định sản phẩm để xóa');

@@ -1,10 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:qlbh_eco_food_admin/auth/auth_service.dart';
 import 'package:qlbh_eco_food_admin/features/customer/model/customer_model.dart';
-import 'package:qlbh_eco_food_admin/features/customer/view/customer_page.dart';
 import 'package:qlbh_eco_food_admin/features/home_page/home_page_view.dart';
 
 class RegisterController extends GetxController {

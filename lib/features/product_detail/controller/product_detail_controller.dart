@@ -26,7 +26,7 @@ class ProductDetailController extends GetxController {
       product = Get.arguments as Product;
 
       nameController = TextEditingController(text: product.name);
-      categoryController = TextEditingController(text: product.category);
+      categoryController = TextEditingController(text: product.categoryId);
       priceController = TextEditingController(text: product.price.toString());
       descriptionController = TextEditingController(text: product.description);
       stockController = TextEditingController(text: product.stock.toString());
@@ -75,11 +75,10 @@ class ProductDetailController extends GetxController {
       final updatedProduct = Product(
         id: product.id,
         name: updatedProductData['name'] as String,
-        category: updatedProductData['category'] as String,
+        categoryId: updatedProductData['category'] as String,
         price: updatedProductData['price'] as double,
         description: updatedProductData['description'] as String,
         stock: updatedProductData['stock'] as int,
-        entryDate: product.entryDate,
         expiryDate: expiryDate,
         imageBase64: updatedProductData['imageBase64'] as String,
         documentId: documentId,

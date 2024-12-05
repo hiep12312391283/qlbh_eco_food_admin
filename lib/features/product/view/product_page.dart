@@ -1,11 +1,12 @@
+import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:qlbh_eco_food_admin/base/const/app_text_style.dart';
 import 'package:qlbh_eco_food_admin/base/const/colors.dart';
 import 'package:qlbh_eco_food_admin/features/product/controller/product_controller.dart';
-import 'dart:convert';
 import 'package:qlbh_eco_food_admin/features/product_detail/view/product_detail_page.dart';
 import 'package:qlbh_eco_food_admin/features/search_product/view/search_product_page.dart';
 
@@ -55,14 +56,14 @@ class ProductPage extends GetView<ProductController> {
               child: Obx(() {
                 return ListView.builder(
                   controller:
-                      controller.scrollController, // Sử dụng scrollController
+                      controller.scrollController, 
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   itemCount: controller.products.length,
                   itemBuilder: (context, index) {
                     final product = controller.products[index];
                     return Card(
                       elevation: 2,
-                      // margin: const EdgeInsets.symmetric(vertical: 8.0),
+
                       child: ListTile(
                         leading: product.imageBase64.isNotEmpty
                             ? ClipRRect(
@@ -87,8 +88,8 @@ class ProductPage extends GetView<ProductController> {
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Mã sản phẩm: ${product.id}'),
-                            Text('Loại: ${product.category}'),
+                            // Text('Mã sản phẩm: ${product.id}'),
+                            Text('Loại: ${product.categoryId}'),
                             Text(
                                 'Giá: ${product.price.toStringAsFixed(2)} VND'),
                             Text('Kho: ${product.stock}'),
@@ -147,8 +148,6 @@ class ProductPage extends GetView<ProductController> {
               key: controller.formKey,
               child: Column(
                 children: [
-                  _buildTextField(controller.idController, 'Mã sản phẩm',
-                      controller.idError),
                   _buildTextField(controller.nameController, 'Tên sản phẩm',
                       controller.nameError),
                   _buildTextField(controller.categoryController,

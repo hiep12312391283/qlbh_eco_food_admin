@@ -7,8 +7,7 @@ class OrderAdmin {
   final List<OrderItemAdmin> products;
   final double totalPrice;
   final int paymentMethod;
-  int
-      orderStatus; 
+  int orderStatus;
 
   OrderAdmin({
     required this.userId,
@@ -19,7 +18,7 @@ class OrderAdmin {
     required this.products,
     required this.totalPrice,
     required this.paymentMethod,
-    required this.orderStatus, 
+    required this.orderStatus,
   });
 
   Map<String, dynamic> toJson() {
@@ -52,7 +51,6 @@ class OrderAdmin {
     );
   }
 }
-
 
 class OrderItemAdmin {
   final String productId;
