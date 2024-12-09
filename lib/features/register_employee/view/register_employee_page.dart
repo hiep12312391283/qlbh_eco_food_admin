@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qlbh_eco_food_admin/base/const/app_text_style.dart';
 import 'package:qlbh_eco_food_admin/base/const/colors.dart';
-import 'package:qlbh_eco_food_admin/features/register/controller/register_customer_controller.dart';
+import 'package:qlbh_eco_food_admin/features/register_employee/controller/register_employee_controller.dart';
 
-class RegisterCustomerPage extends StatelessWidget {
-  final RegisterController controller = Get.put(RegisterController());
+class RegisterEmployeePage extends StatelessWidget {
+  final RegisterEmployeeController controller =
+      Get.put(RegisterEmployeeController());
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +14,7 @@ class RegisterCustomerPage extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'Đăng ký khách hàng mới',
+          'Đăng ký nhân viên mới',
           style: AppTextStyle.font24Semi.copyWith(color: Colors.white),
         ),
         backgroundColor: AppColors.green.shade400,
@@ -37,9 +38,6 @@ class RegisterCustomerPage extends StatelessWidget {
                         text: "Số điện thoại",
                         controller: controller.phoneController),
                     txtFormField(
-                        text: "Địa chỉ giao hàng",
-                        controller: controller.addressController),
-                    txtFormField(
                         text: "Mật khẩu",
                         controller: controller.passwordController),
                     txtFormField(
@@ -53,7 +51,7 @@ class RegisterCustomerPage extends StatelessWidget {
             // Nút Đăng ký sẽ luôn nằm dưới cùng
             GestureDetector(
               onTap: () {
-                controller.validateAndAddUser(context);
+                controller.validateAndAddEmployee(context);
               },
               child: Container(
                 width: double.infinity,
@@ -89,7 +87,6 @@ class RegisterCustomerPage extends StatelessWidget {
                 ),
               ),
             ),
-
           ],
         ),
       ),

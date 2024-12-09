@@ -3,7 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qlbh_eco_food_admin/auth/auth_service.dart';
-import 'package:qlbh_eco_food_admin/features/customer/model/customer_model.dart';
+import 'package:qlbh_eco_food_admin/features/register/model/account_model.dart';
+import 'package:qlbh_eco_food_admin/features/users/model/user_model.dart';
 import 'package:qlbh_eco_food_admin/features/home_page/home_page_view.dart';
 
 class RegisterController extends GetxController {
@@ -13,13 +14,13 @@ class RegisterController extends GetxController {
   final phoneController = TextEditingController();
   final nameController = TextEditingController();
   final addressController = TextEditingController();
-  var users = <Customer>[].obs;
+  var users = <UserModel>[].obs;
   // final formKey = GlobalKey<FormState>();
 
   final isLoading = false.obs; // Trạng thái loading
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // Phương thức để đăng ký và thêm người dùng vào Firestore
+  // Phương thức để đăng ký và thêm người dùng và tài khoản vào Firestore
   Future<void> validateAndAddUser(BuildContext context) async {
     print("Bắt đầu validateAndAddUser");
 
@@ -82,7 +83,7 @@ class RegisterController extends GetxController {
       emailVerified = FirebaseAuth.instance.currentUser?.emailVerified ?? false;
 
       if (emailVerified) {
-        Customer user = Customer(
+        UserModel user = UserModel(
           id: FirebaseAuth.instance.currentUser!.uid,
           email: emailController.text,
           phone: phoneController.text,
@@ -90,8 +91,16 @@ class RegisterController extends GetxController {
           address: addressController.text,
         );
 
+        AccountModel account = AccountModel(
+          accountId: FirebaseAuth.instance.currentUser!.uid,
+          email: emailController.text,
+          password: passwordController.text,
+          role: 'user', // Vai trò mặc định là 'user'
+        );
+
         addUser(user); // Thêm người dùng vào Firestore
-        print("Lưu thông tin người dùng thành công");
+        addAccount(account); // Thêm tài khoản vào Firestore
+        print("Lưu thông tin người dùng và tài khoản thành công");
         Get.to(HomePageView());
         break;
       } else {
@@ -102,13 +111,23 @@ class RegisterController extends GetxController {
     }
   }
 
-
 // Thêm thông tin người dùng vào Firestore
-  void addUser(Customer user) {
+  void addUser(UserModel user) {
     _firestore
         .collection('users')
         .doc(user.id)
         .set(user.toJson())
+        .catchError((e) {
+      print("Lỗi khi thêm vào Firestore: $e");
+    });
+  }
+
+  // Thêm thông tin tài khoản vào Firestore
+  void addAccount(AccountModel account) {
+    _firestore
+        .collection('accounts')
+        .doc(account.accountId)
+        .set(account.toJson())
         .catchError((e) {
       print("Lỗi khi thêm vào Firestore: $e");
     });

@@ -42,6 +42,11 @@ class ProductController extends GetxController {
   final FirebaseDatabase _database = FirebaseDatabase.instance;
   final isLoading = false.obs; // Trạng thái loading
 
+  var totalProducts = 0.obs;
+  var categoryCounts =
+      <String, int>{}.obs; // Lưu trữ số lượng sản phẩm theo danh mục
+
+
   // ScrollController để lắng nghe sự kiện cuộn
   final ScrollController scrollController = ScrollController();
 
@@ -54,29 +59,54 @@ class ProductController extends GetxController {
   }
 
   void addProduct(Product product) {
-    products.add(product);
-    _firestore.collection('products').add(product.toJson()).catchError((e) {
-      print("Lỗi khi thêm vào Firestore: $e");
-    });
-    _database
-        .ref()
-        .child('products')
-        .child(product.id)
-        .set(product.toJson())
-        .catchError((e) {
-      print("Lỗi khi thêm vào Realtime Database: $e");
-    });
+    // Nếu id không có giá trị, thì để Firestore tự tạo id
+    if (product.id.isEmpty) {
+      _firestore.collection('products').add(product.toJson()).then((docRef) {
+        // Lấy ID tự động của Firestore
+        product.id = docRef.id;
+        // Cập nhật lại product với ID tự động
+        _database
+            .ref()
+            .child('products')
+            .child(product.id)
+            .set(product.toJson())
+            .catchError((e) {
+          print("Lỗi khi thêm vào Realtime Database: $e");
+        });
+        products.add(product);
+      }).catchError((e) {
+        print("Lỗi khi thêm vào Firestore: $e");
+      });
+    } else {
+      // Nếu đã có ID, sử dụng phương thức set như bình thường
+      _firestore
+          .collection('products')
+          .doc(product.id)
+          .set(product.toJson())
+          .catchError((e) {
+        print("Lỗi khi thêm vào Firestore: $e");
+      });
+      _database
+          .ref()
+          .child('products')
+          .child(product.id)
+          .set(product.toJson())
+          .catchError((e) {
+        print("Lỗi khi thêm vào Realtime Database: $e");
+      });
+      products.add(product);
+    }
   }
 
   Future<void> fetchProducts() async {
     try {
-      isLoading.value = true; // Bắt đầu loading
+      isLoading.value = true;
 
       final querySnapshot = await _firestore.collection('products').get();
       final List<Product> loadedProducts = querySnapshot.docs.map((doc) {
         final data = doc.data() ?? {};
         return Product(
-          id: data['id'] ?? '', // Default to empty string if null
+          id: data['id'] ?? '',
           name: data['name'] ?? '',
           categoryId: data['categoryId'] ?? '',
           price: double.tryParse(data['price']?.toString() ?? '') ?? 0.0,
@@ -90,11 +120,25 @@ class ProductController extends GetxController {
         );
       }).toList();
 
-      products.addAll(loadedProducts); // Cập nhật danh sách sản phẩm
+      products.addAll(loadedProducts);
+
+      // Cập nhật tổng số sản phẩm
+      totalProducts.value = products.length;
+
+      // Cập nhật số lượng sản phẩm theo loại danh mục
+      categoryCounts.clear();
+      for (var product in products) {
+        if (categoryCounts.containsKey(product.categoryId)) {
+          categoryCounts[product.categoryId] =
+              categoryCounts[product.categoryId]! + 1;
+        } else {
+          categoryCounts[product.categoryId] = 1;
+        }
+      }
     } catch (e) {
       print("Error fetching products: $e");
     } finally {
-      isLoading.value = false; // Kết thúc loading
+      isLoading.value = false;
     }
   }
 
@@ -157,8 +201,6 @@ class ProductController extends GetxController {
 
   void validateAndAddProduct() async {
     if (formKey.currentState!.validate()) {
-      if (idController.text.isEmpty)
-        idError.value = 'Mã sản phẩm không được để trống';
       if (nameController.text.isEmpty)
         nameError.value = 'Tên sản phẩm không được để trống';
       if (categoryController.text.isEmpty)
@@ -183,17 +225,17 @@ class ProductController extends GetxController {
         try {
           String imageBase64 =
               encodeImageToBase64(File(selectedImagePath.value));
-          addProduct(Product(
-            id: idController.text,
+          final product = Product(
+            id: '', // Để trống ID, Firestore sẽ tự tạo
             name: nameController.text,
             categoryId: categoryController.text,
             price: double.parse(priceController.text),
             description: descriptionController.text,
             stock: int.parse(stockController.text),
-
             expiryDate: expiryDate,
             imageBase64: imageBase64,
-          ));
+          );
+          addProduct(product); // Gọi phương thức addProduct
           clearInputs();
           Navigator.of(Get.context!).pop();
           Get.snackbar("Thành công",

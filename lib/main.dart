@@ -5,6 +5,8 @@ import 'package:qlbh_eco_food_admin/app/binding/global_binding.dart';
 import 'package:qlbh_eco_food_admin/app/ui/splash_screen.dart';
 import 'package:qlbh_eco_food_admin/features/home_page/home_page_binding.dart';
 import 'package:qlbh_eco_food_admin/features/home_page/home_page_view.dart';
+import 'package:qlbh_eco_food_admin/features/login/binding/login_binding.dart';
+import 'package:qlbh_eco_food_admin/features/login/view/login_page.dart';
 import 'package:qlbh_eco_food_admin/features/product/binding/product_binding.dart';
 import 'package:qlbh_eco_food_admin/features/product/view/product_page.dart';
 
@@ -29,6 +31,11 @@ class MyApp extends StatelessWidget {
       home: SplashPage(),
       initialBinding: GlobalBinding(),
       getPages: [
+        GetPage(
+          name: '/login',
+          page: () => LoginPage(),
+          binding: LoginBinding(),
+        ),
         GetPage(
             name: '/home_page',
             page: () => HomePageView(),

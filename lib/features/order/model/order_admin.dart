@@ -31,7 +31,7 @@ class OrderAdmin {
       'products': products.map((item) => item.toJson()).toList(),
       'totalPrice': totalPrice,
       'paymentMethod': paymentMethod,
-      'orderStatus': orderStatus, // Trạng thái đơn hàng
+      'orderStatus': orderStatus,
     };
   }
 

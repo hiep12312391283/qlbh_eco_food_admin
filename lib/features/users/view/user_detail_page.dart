@@ -2,33 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qlbh_eco_food_admin/base/const/app_text_style.dart';
 import 'package:qlbh_eco_food_admin/base/const/colors.dart';
-import 'package:qlbh_eco_food_admin/features/customer/controller/customer_controller.dart';
-import 'package:qlbh_eco_food_admin/features/customer/model/customer_model.dart';
+import 'package:qlbh_eco_food_admin/features/users/controller/user_controller.dart';
+import 'package:qlbh_eco_food_admin/features/users/model/user_model.dart';
 
-class CustomerDetailPage extends StatefulWidget {
-  final Customer customer;
+class UserDetailPage extends StatefulWidget {
+  final UserModel userModel;
 
-  CustomerDetailPage({required this.customer});
+  UserDetailPage({required this.userModel});
 
   @override
-  _CustomerDetailPageState createState() => _CustomerDetailPageState();
+  _UserDetailPageState createState() => _UserDetailPageState();
 }
 
-class _CustomerDetailPageState extends State<CustomerDetailPage> {
+class _UserDetailPageState extends State<UserDetailPage> {
   late TextEditingController nameController;
   late TextEditingController phoneController;
   late TextEditingController addressController;
 
-  final CustomerController controller = Get.find<CustomerController>();
+  final UserController controller = Get.find<UserController>();
 
   @override
   void initState() {
     super.initState();
 
-    // Initialize controllers with customer data
-    nameController = TextEditingController(text: widget.customer.name);
-    phoneController = TextEditingController(text: widget.customer.phone);
-    addressController = TextEditingController(text: widget.customer.address);
+    // Initialize controllers with user data
+    nameController = TextEditingController(text: widget.userModel.name);
+    phoneController = TextEditingController(text: widget.userModel.phone);
+    addressController = TextEditingController(text: widget.userModel.address);
   }
 
   @override
@@ -115,7 +115,7 @@ class _CustomerDetailPageState extends State<CustomerDetailPage> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            'Thông tin khách hàng',
+            'Thông tin người dùng',
             style: AppTextStyle.font24Semi.copyWith(color: Colors.white),
           ),
           backgroundColor: AppColors.green.shade400,
@@ -152,7 +152,7 @@ class _CustomerDetailPageState extends State<CustomerDetailPage> {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: Text(
-                  widget.customer.email,
+                  widget.userModel.email,
                   style: AppTextStyle.font18Re
                       .copyWith(color: Colors.grey.shade700),
                 ),
@@ -196,12 +196,12 @@ class _CustomerDetailPageState extends State<CustomerDetailPage> {
                     _showConfirmationDialog(
                       context,
                       'Xác nhận cập nhật',
-                      'Bạn có chắc chắn muốn cập nhật thông tin khách hàng?',
+                      'Bạn có chắc chắn muốn cập nhật thông tin người dùng?',
                       () {
-                        controller.updateCustomer(
-                          widget.customer.id,
+                        controller.updateUser(
+                          widget.userModel.id,
                           nameController.text,
-                          widget.customer.email,
+                          widget.userModel.email,
                           phoneController.text,
                           addressController.text,
                         );
@@ -229,9 +229,9 @@ class _CustomerDetailPageState extends State<CustomerDetailPage> {
                     _showConfirmationDialog(
                       context,
                       'Xác nhận xóa',
-                      'Bạn có chắc chắn muốn xóa khách hàng này?',
+                      'Bạn có chắc chắn muốn xóa người dùng này?',
                       () {
-                        controller.deleteCustomer(widget.customer.id);
+                        controller.deleteUser(widget.userModel.id);
                         Get.back(); // Quay lại màn hình trước
                       },
                     );

@@ -2,22 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qlbh_eco_food_admin/base/const/app_text_style.dart';
 import 'package:qlbh_eco_food_admin/base/const/colors.dart';
-import 'package:qlbh_eco_food_admin/features/category/controller/category_controller.dart';
-import 'package:qlbh_eco_food_admin/features/employee/view/employee_page.dart';
-import 'package:qlbh_eco_food_admin/features/login/view/login_page.dart';
-import 'package:qlbh_eco_food_admin/features/register_employee/view/register_employee_page.dart';
-import 'package:qlbh_eco_food_admin/features/statistics/orderstatistics_page.dart';
-import 'package:qlbh_eco_food_admin/features/statistics/produc_statistics_page.dart';
-import 'package:qlbh_eco_food_admin/features/statistics/user_statistics_page.dart';
-import 'package:qlbh_eco_food_admin/features/users/view/user_page.dart';
+import 'package:qlbh_eco_food_admin/features/profile/controller/profile_controller.dart';
+import 'package:qlbh_eco_food_admin/features/profile/view/edit_profile_page.dart';
 
-class CategoryPage extends GetView<CategoryController> {
-  const CategoryPage({super.key});
+
+class ProfilePage extends GetView<ProfileController> {
+  ProfilePage({super.key});
+  final ProfileController controller = Get.put(ProfileController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.green.shade100,
+      backgroundColor: AppColors.backgroundColor,
       body: SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -38,44 +34,17 @@ class CategoryPage extends GetView<CategoryController> {
               child: Column(
                 children: [
                   _buildButtonProfile(
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.to(EditProfilePage());
+                      },
                       text: "Thông tin cá nhân",
                       icon: Icons.person_outline),
                   const Divider(height: 0.5),
                   _buildButtonProfile(
-                      onPressed: () {
-                        Get.to(UserPage());
-                      },
-                      text: "Quản lý Khách hàng",
-                      icon: Icons.people_outline), // Adjusted icon
-                  const Divider(height: 0.5),
-                  _buildButtonProfile(
-                      onPressed: () {
-                        Get.to(EmployeePage());
-                      },
-                      text: "Quản lý Nhân viên",
-                      icon: Icons.people_alt_outlined), // Adjusted icon
+                      onPressed: () {},
+                      text: "Tổng đài tư vấn: 1900.1908",
+                      icon: Icons.phone_outlined),
                   const Divider(height: 1),
-                  _buildButtonProfile(
-                      onPressed: () {
-                        Get.to(OrderStatisticsPage());
-                      },
-                      text: "Báo cáo đơn hàng",
-                      icon: Icons.report), // Adjusted icon
-                  const Divider(height: 1),
-                  _buildButtonProfile(
-                      onPressed: () {
-                        Get.to(ProductStatisticsPage());
-                      },
-                      text: "Thống kê sản phẩm",
-                      icon: Icons.inventory), // Adjusted icon
-                  const Divider(height: 1),
-                  _buildButtonProfile(
-                      onPressed: () {
-                        Get.to(UserStatisticsPage());
-                      },
-                      text: "Thống kê khách hàng",
-                      icon: Icons.bar_chart), // Adjusted icon
                 ],
               ),
             ).paddingAll(16),
@@ -96,7 +65,7 @@ class CategoryPage extends GetView<CategoryController> {
               ),
               child: _buildButtonProfile(
                   onPressed: () {
-                    Get.to(LoginPage());
+                    Get.offAllNamed("/login");
                   },
                   text: "Đăng xuất",
                   icon: Icons.logout_outlined,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:qlbh_eco_food_admin/features/login/view/login_page.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -21,7 +22,7 @@ class _SplashPageState extends State<SplashPage> {
 
   void navigatorNextScreen() async {
     await Future.delayed(const Duration(seconds: 2));
-    Get.toNamed('/home_page');
+    Get.to(LoginPage());
   }
 
   @override

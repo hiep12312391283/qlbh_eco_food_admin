@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qlbh_eco_food_admin/base/const/app_text_style.dart';
 import 'package:qlbh_eco_food_admin/base/const/colors.dart';
-import 'package:qlbh_eco_food_admin/features/customer/controller/customer_controller.dart';
-import 'customer_detail_page.dart'; // Import trang chi tiết khách hàng
-import 'package:qlbh_eco_food_admin/features/register/view/register_customer_page.dart'; // Import trang đăng ký khách hàng
+import 'package:qlbh_eco_food_admin/features/register/model/account_model.dart';
+import 'package:qlbh_eco_food_admin/features/register/view/register_user_page.dart';
+import 'package:qlbh_eco_food_admin/features/users/controller/user_controller.dart';
+import 'user_detail_page.dart'; // Import trang chi tiết người dùng
 
-class CustomerPage extends GetView<CustomerController> {
-  final CustomerController controller = Get.put(CustomerController());
-  CustomerPage({Key? key}) : super(key: key);
+class UserPage extends GetView<UserController> {
+  final UserController controller = Get.put(UserController());
+  UserPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // automaticallyImplyLeading: false,
         centerTitle: true,
         title: Text(
-          'Danh sách khách hàng',
+          'Danh sách người dùng',
           style: AppTextStyle.font24Semi.copyWith(color: Colors.white),
         ),
         backgroundColor: AppColors.green.shade400,
@@ -25,8 +25,8 @@ class CustomerPage extends GetView<CustomerController> {
           IconButton(
             icon: Icon(Icons.add, color: Colors.white),
             onPressed: () {
-              // Điều hướng đến trang đăng ký tài khoản khách hàng mới
-              Get.to(() => RegisterCustomerPage());
+              // Điều hướng đến trang đăng ký tài khoản người dùng mới
+              Get.to(() => RegisterUserPage());
             },
           ),
         ],
@@ -44,15 +44,20 @@ class CustomerPage extends GetView<CustomerController> {
           if (controller.isLoading.value) {
             return Center(child: CircularProgressIndicator());
           }
-          if (controller.customers.isEmpty) {
+          if (controller.users.isEmpty) {
             return Center(
-                child: Text('Không có khách hàng',
+                child: Text('Không có người dùng',
                     style: TextStyle(fontSize: 18.0)));
           }
           return ListView.builder(
-            itemCount: controller.customers.length,
+            itemCount: controller.users.length,
             itemBuilder: (context, index) {
-              final customer = controller.customers[index];
+              final user = controller.users[index];
+              final account = controller.accounts.firstWhere(
+                  (account) => account.accountId == user.id,
+                  orElse: () => AccountModel(
+                      accountId: '', email: '', password: '', role: 'user'));
+
               return Card(
                 elevation: 5,
                 margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 5.0),
@@ -60,13 +65,19 @@ class CustomerPage extends GetView<CustomerController> {
                   contentPadding: EdgeInsets.all(10.0),
                   leading: CircleAvatar(
                     backgroundColor: Colors.teal,
-                    child: Text(customer.name[0],
+                    child: Text(user.name[0],
                         style: TextStyle(color: Colors.white)),
                   ),
-                  title: Text(customer.name,
+                  title: Text(user.name,
                       style: TextStyle(fontWeight: FontWeight.bold)),
-                  onTap: () =>
-                      Get.to(() => CustomerDetailPage(customer: customer)),
+                  subtitle: Text('Email: ${user.email}\nRole: ${account.role}'),
+                  onTap: () => Get.to(() => UserDetailPage(userModel: user)),
+                  trailing: IconButton(
+                    icon: Icon(Icons.delete, color: Colors.red),
+                    onPressed: () {
+                      controller.deleteUser(user.id);
+                    },
+                  ),
                 ),
               );
             },

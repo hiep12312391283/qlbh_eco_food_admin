@@ -55,15 +55,13 @@ class ProductPage extends GetView<ProductController> {
             Expanded(
               child: Obx(() {
                 return ListView.builder(
-                  controller:
-                      controller.scrollController, 
+                  controller: controller.scrollController,
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   itemCount: controller.products.length,
                   itemBuilder: (context, index) {
                     final product = controller.products[index];
                     return Card(
                       elevation: 2,
-
                       child: ListTile(
                         leading: product.imageBase64.isNotEmpty
                             ? ClipRRect(
@@ -88,39 +86,28 @@ class ProductPage extends GetView<ProductController> {
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Text('Mã sản phẩm: ${product.id}'),
                             Text('Loại: ${product.categoryId}'),
-                            Text(
-                                'Giá: ${product.price.toStringAsFixed(2)} VND'),
+                            Text('Giá: ${product.price.toStringAsFixed(2)} VND'),
                             Text('Kho: ${product.stock}'),
                             Text(
                               'Hạn sử dụng: ${DateFormat('dd/MM/yyyy').format(product.expiryDate)}',
                             ),
                           ],
                         ),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.edit, color: Colors.blue),
-                              onPressed: () {
-                                Get.to(() => ProductDetailPage(),
-                                    arguments: product);
-                              },
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: () {
-                                if (product.documentId != null) {
-                                  _showDeleteConfirmationDialog(
-                                      context, product.documentId!);
-                                } else {
-                                  Get.snackbar('Lỗi',
-                                      'Không thể xác định sản phẩm để xóa');
-                                }
-                              },
-                            ),
-                          ],
+                        onTap: () {
+                          Get.to(() => ProductDetailPage(), arguments: product);
+                        },
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () {
+                            if (product.documentId != null) {
+                              _showDeleteConfirmationDialog(
+                                  context, product.documentId!);
+                            } else {
+                              Get.snackbar('Lỗi',
+                                  'Không thể xác định sản phẩm để xóa');
+                            }
+                          },
                         ),
                       ),
                     ).paddingOnly(top: 8);

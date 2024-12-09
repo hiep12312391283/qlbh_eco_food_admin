@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // Import gói intl
 import 'package:qlbh_eco_food_admin/base/const/colors.dart';
+import 'package:qlbh_eco_food_admin/features/home_page/home_page_view.dart';
 import 'package:qlbh_eco_food_admin/features/order/model/order_admin.dart';
 import 'package:qlbh_eco_food_admin/features/order/controller/order_controller.dart';
 import 'package:qlbh_eco_food_admin/base/const/app_text_style.dart';
 import 'package:get/get.dart';
+import 'package:qlbh_eco_food_admin/features/order/view/order_page.dart';
 
 class OrderDetailPage extends GetView<OrderController> {
   final OrderAdmin order;
@@ -273,7 +275,6 @@ class OrderDetailPage extends GetView<OrderController> {
     );
   }
 
-
   void _updateOrderStatus(OrderAdmin order) {
     if (order.orderStatus < 3) {
       orderController.updateOrderStatus(order, order.orderStatus + 1);
@@ -284,7 +285,8 @@ class OrderDetailPage extends GetView<OrderController> {
     Get.dialog(
       AlertDialog(
         title: const Text('Xác nhận hoàn tất đơn hàng'),
-        content: const Text('Bạn có chắc chắn muốn hoàn tất đơn hàng này không?'),
+        content:
+            const Text('Bạn có chắc chắn muốn hoàn tất đơn hàng này không?'),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
@@ -293,7 +295,7 @@ class OrderDetailPage extends GetView<OrderController> {
           TextButton(
             onPressed: () {
               orderController.updateOrderStatus(order, 3);
-              Get.back();
+              Get.toNamed("/home_page");
             },
             child: const Text('Có'),
           ),

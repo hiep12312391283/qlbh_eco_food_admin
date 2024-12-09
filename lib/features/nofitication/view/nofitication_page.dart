@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:qlbh_eco_food_admin/base/const/app_text_style.dart';
 import 'package:qlbh_eco_food_admin/base/const/colors.dart';
 import 'package:qlbh_eco_food_admin/features/nofitication/controller/nofitication_controller.dart';
-import 'package:qlbh_eco_food_admin/features/register/view/register_customer_page.dart'; // Import trang đăng ký khách hàng
+import 'package:qlbh_eco_food_admin/features/register/view/register_user_page.dart'; // Import trang đăng ký khách hàng
 
 class NofiticationPage extends GetView<NofiticationController> {
   final NofiticationController controller = Get.put(NofiticationController());
