@@ -15,14 +15,16 @@ class HomePageView extends GetView<HomePageController> {
   @override
   Widget build(BuildContext context) {
     final arguments = Get.arguments;
-    final role = arguments != null && arguments['role'] != null
-        ? arguments['role']
-        : 'default'; // Nếu không có giá trị 'role', sử dụng giá trị mặc định
+
+    final role =
+        (arguments is Map<String, dynamic> && arguments.containsKey('role'))
+            ? arguments['role']
+            : 'default'; // Gán giá trị mặc định là 'default'
 
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       body: PageView(
-        physics: const NeverScrollableScrollPhysics(), // Tắt hiệu ứng vuốt
+        physics: const NeverScrollableScrollPhysics(),
         controller: _pageController,
         onPageChanged: (index) {
           controller.pageIndex.value = index;
@@ -53,8 +55,9 @@ class HomePageView extends GetView<HomePageController> {
     if (role == 'admin') {
       return [
         ProductPage(),
+        OrderPage(),
         NofiticationPage(),
-        CategoryPage(),
+        const CategoryPage(),
       ];
     } else if (role == 'employee') {
       return [
@@ -77,6 +80,10 @@ class HomePageView extends GetView<HomePageController> {
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           label: 'Sản phẩm',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.local_shipping),
+          label: 'Đơn hàng',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.notifications),

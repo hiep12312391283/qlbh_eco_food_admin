@@ -1,13 +1,12 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // Import gói intl
-import 'package:qlbh_eco_food_admin/base/const/colors.dart';
-import 'package:qlbh_eco_food_admin/features/home_page/home_page_view.dart';
-import 'package:qlbh_eco_food_admin/features/order/model/order_admin.dart';
-import 'package:qlbh_eco_food_admin/features/order/controller/order_controller.dart';
-import 'package:qlbh_eco_food_admin/base/const/app_text_style.dart';
 import 'package:get/get.dart';
-import 'package:qlbh_eco_food_admin/features/order/view/order_page.dart';
+import 'package:intl/intl.dart'; // Import gói intl
+import 'package:qlbh_eco_food_admin/base/const/app_text_style.dart';
+import 'package:qlbh_eco_food_admin/base/const/colors.dart';
+import 'package:qlbh_eco_food_admin/features/order/controller/order_controller.dart';
+import 'package:qlbh_eco_food_admin/features/order/model/order_admin.dart';
 
 class OrderDetailPage extends GetView<OrderController> {
   final OrderAdmin order;
@@ -67,7 +66,7 @@ class OrderDetailPage extends GetView<OrderController> {
                       ),
                       const SizedBox(height: 20),
                       Text('Sản phẩm:', style: AppTextStyle.font16Semi),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       ...order.products
                           .map((item) => _buildProductRow(item))
                           .toList(),
@@ -95,9 +94,9 @@ class OrderDetailPage extends GetView<OrderController> {
       child: Row(
         children: [
           Icon(icon, color: Colors.blue),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Text('$title:', style: AppTextStyle.font16Semi),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Flexible(
             child: Text(
               value,
@@ -127,7 +126,7 @@ class OrderDetailPage extends GetView<OrderController> {
                     ),
                   ),
                 )
-              : Icon(Icons.image_not_supported, size: 50),
+              : const Icon(Icons.image_not_supported, size: 50),
           SizedBox(width: 16),
           Expanded(
             child: Column(
@@ -135,14 +134,14 @@ class OrderDetailPage extends GetView<OrderController> {
               children: [
                 Text(
                   item.productName,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),
                 ),
                 Text(
                   _formatCurrency(item.price), // Định dạng giá tiền
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.green,
                     fontSize: 14,
                   ),

@@ -30,13 +30,14 @@ class Comment {
 
   factory Comment.fromDocumentSnapshot(DocumentSnapshot doc) {
     return Comment(
-      id: doc.id, // Assign id from DocumentSnapshot
-      userName: doc['userName'],
-      content: doc['content'],
-      productId: doc['productId'],
-      userId: doc['userId'],
+      id: doc.id,
+      userName: doc['userName'] ?? '',
+      content: doc['content'] ?? '',
+      productId: doc['productId'] ?? '',
+      userId: doc['userId'] ?? '',
       createdAt: (doc['createdAt'] as Timestamp)
-          .toDate(), // Convert Timestamp to DateTime
+          .toDate(), // Chuyển từ Timestamp sang DateTime
     );
   }
+
 }

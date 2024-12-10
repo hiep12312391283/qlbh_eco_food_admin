@@ -3,9 +3,9 @@ import 'package:get/get.dart';
 import 'package:qlbh_eco_food_admin/base/const/app_text_style.dart';
 import 'package:qlbh_eco_food_admin/base/const/colors.dart';
 import 'package:qlbh_eco_food_admin/features/nofitication/controller/nofitication_controller.dart';
-import 'package:qlbh_eco_food_admin/features/register/view/register_user_page.dart'; // Import trang đăng ký khách hàng
 
 class NofiticationPage extends GetView<NofiticationController> {
+  @override
   final NofiticationController controller = Get.put(NofiticationController());
   NofiticationPage({Key? key}) : super(key: key);
 
@@ -22,7 +22,7 @@ class NofiticationPage extends GetView<NofiticationController> {
         backgroundColor: AppColors.green.shade400,
       ),
       body: Container(
-        padding: EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(10.0),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [AppColors.green.shade100, AppColors.green.shade100],

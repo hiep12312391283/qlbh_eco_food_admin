@@ -5,7 +5,6 @@ import 'package:qlbh_eco_food_admin/base/const/colors.dart';
 import 'package:qlbh_eco_food_admin/features/category/controller/category_controller.dart';
 import 'package:qlbh_eco_food_admin/features/employee/view/employee_page.dart';
 import 'package:qlbh_eco_food_admin/features/login/view/login_page.dart';
-import 'package:qlbh_eco_food_admin/features/register_employee/view/register_employee_page.dart';
 import 'package:qlbh_eco_food_admin/features/statistics/orderstatistics_page.dart';
 import 'package:qlbh_eco_food_admin/features/statistics/produc_statistics_page.dart';
 import 'package:qlbh_eco_food_admin/features/statistics/user_statistics_page.dart';

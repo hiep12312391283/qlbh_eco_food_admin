@@ -1,16 +1,34 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:qlbh_eco_food_admin/features/product/model/product_model.dart';
+import 'package:qlbh_eco_food_admin/features/product_detail/controller/product_detail_controller.dart';
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:qlbh_eco_food_admin/features/product/model/product_model.dart';
 import 'package:qlbh_eco_food_admin/features/product_detail/controller/product_detail_controller.dart';
 
 class ProductDetailPage extends GetView<ProductDetailController> {
-  const ProductDetailPage({Key? key}) : super(key: key);
+  ProductDetailPage({Key? key}) : super(key: key);
+  final controller = Get.put(ProductDetailController());
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(ProductDetailController());
+    final Product? product = Get.arguments as Product?;
+    if (product == null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('Lỗi'),
+        ),
+        body: Center(
+          child: Text('Lỗi: Không tìm thấy sản phẩm.'),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Chi tiết sản phẩm'),
@@ -61,6 +79,8 @@ class ProductDetailPage extends GetView<ProductDetailController> {
                 child: const Text('Lưu thay đổi'),
               ),
             ),
+            const SizedBox(height: 20),
+            _buildCommentsSection(controller, product.documentId!),
           ],
         ),
       ),
@@ -93,6 +113,56 @@ class ProductDetailPage extends GetView<ProductDetailController> {
         height: 200,
         fit: BoxFit.cover,
       ),
+    );
+  }
+
+  Widget _buildCommentsSection(
+      ProductDetailController controller, String productId) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Bình luận',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 10),
+        Obx(() {
+          if (controller.isLoadingComments.value) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (controller.comments.isEmpty) {
+            return const Center(child: Text('Chưa có bình luận.'));
+          }
+
+          return ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: controller.comments.length,
+            itemBuilder: (context, index) {
+              final comment = controller.comments[index];
+              return ListTile(
+                title: Text(comment.userName),
+                subtitle: Text(comment.content),
+                trailing:
+                    Text(DateFormat('yyyy-MM-dd').format(comment.createdAt)),
+              );
+            },
+          );
+        }),
+        const SizedBox(height: 10),
+        TextField(
+          controller: controller.commentController,
+          decoration: InputDecoration(
+            labelText: 'Thêm bình luận',
+            border: OutlineInputBorder(),
+          ),
+        ),
+        const SizedBox(height: 10),
+        ElevatedButton(
+          onPressed: () =>
+              controller.addComment(), // Sử dụng controller.addComment()
+          child: const Text('Gửi bình luận'),
+        ),
+      ],
     );
   }
 }
