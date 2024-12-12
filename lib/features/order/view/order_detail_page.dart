@@ -161,7 +161,7 @@ class OrderDetailPage extends GetView<OrderController> {
   Widget _buildOrderStatus(int status) {
     List<String> statusList = [
       'Đã đặt hàng',
-      'Đang chờ đơn vị vận chuyển',
+      'Giao hàng cho shipper',
       'Đang vận chuyển',
       'Đơn hàng đã được giao'
     ];
@@ -221,8 +221,8 @@ class OrderDetailPage extends GetView<OrderController> {
     }
 
     List<String> buttonTexts = [
-      'Đang chờ đơn vị vận chuyển',
       'Giao hàng cho shipper',
+      'Đang giao hàng',
       'Hoàn tất đơn hàng'
     ];
 
@@ -294,7 +294,8 @@ class OrderDetailPage extends GetView<OrderController> {
           TextButton(
             onPressed: () {
               orderController.updateOrderStatus(order, 3);
-              Get.toNamed("/home_page");
+              // Get.toNamed("/home_page");
+              Get.back();
             },
             child: const Text('Có'),
           ),

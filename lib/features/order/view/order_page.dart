@@ -185,7 +185,7 @@ String _formatCurrency(double amount) {
 String _getOrderStatus(int status) {
   List<String> statusList = [
     'Đã đặt hàng',
-    'Đang chờ đơn vị vận chuyển',
+    'Giao hàng cho shipper',
     'Đang vận chuyển',
     'Đơn hàng đã được giao'
   ];

@@ -27,7 +27,10 @@ class HomePageView extends GetView<HomePageController> {
         physics: const NeverScrollableScrollPhysics(),
         controller: _pageController,
         onPageChanged: (index) {
-          controller.pageIndex.value = index;
+          // Đảm bảo index không vượt quá số lượng trang trong _buildPages
+          if (index >= 0 && index < _buildPages(role).length) {
+            controller.pageIndex.value = index;
+          }
         },
         children: _buildPages(role),
       ),
@@ -42,8 +45,11 @@ class HomePageView extends GetView<HomePageController> {
             selectedItemColor: AppColors.green,
             unselectedItemColor: Colors.grey,
             onTap: (index) {
-              controller.pageIndex.value = index;
-              _pageController.jumpToPage(index);
+              // Đảm bảo index không vượt quá số lượng mục trong _buildBottomNavItems
+              if (index >= 0 && index < _buildBottomNavItems(role).length) {
+                controller.pageIndex.value = index;
+                _pageController.jumpToPage(index);
+              }
             },
           ),
         ),
@@ -124,6 +130,7 @@ class HomePageView extends GetView<HomePageController> {
         icon: Icon(Icons.person),
         label: 'Tài khoản',
       ),
+      
     ];
   }
 }

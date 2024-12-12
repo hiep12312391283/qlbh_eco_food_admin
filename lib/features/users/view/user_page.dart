@@ -70,7 +70,7 @@ class UserPage extends GetView<UserController> {
                   ),
                   title: Text(user.name,
                       style: TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle: Text('Email: ${user.email}\nRole: ${account.role}'),
+                  subtitle: Text('Email: ${user.email}'),
                   onTap: () => Get.to(() => UserDetailPage(userModel: user)),
                   trailing: IconButton(
                     icon: Icon(Icons.delete, color: Colors.red),

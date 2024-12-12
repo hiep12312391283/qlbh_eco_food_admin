@@ -5,11 +5,12 @@ import 'package:intl/intl.dart';
 import 'package:qlbh_eco_food_admin/features/product/controller/product_controller.dart';
 import 'package:qlbh_eco_food_admin/features/product/model/product_model.dart';
 import 'package:qlbh_eco_food_admin/features/product_detail/models/comment.dart';
+import 'package:qlbh_eco_food_admin/features/users/model/user_model.dart';
 class ProductDetailController extends GetxController {
   late Product product;
   var comments = <Comment>[].obs;
   var isLoadingComments = true.obs;
-
+  var userMap = <String, UserModel>{}.obs; // Keyed by userId
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   late TextEditingController nameController;
@@ -51,49 +52,60 @@ class ProductDetailController extends GetxController {
     try {
       isLoadingComments.value = true;
 
-      // Truy vấn Firestore để lấy các bình luận có productId trùng với documentId của sản phẩm hiện tại
+      // Fetch comments first
       QuerySnapshot snapshot = await _firestore
           .collection('comments')
-          .where('productId',
-              isEqualTo: documentId) // Lọc bình luận theo productId
-          .orderBy('createdAt',
-              descending: true) // Sắp xếp bình luận theo thời gian
+          .where('productId', isEqualTo: documentId)
+          .orderBy('createdAt', descending: true)
           .get();
 
-      comments.clear(); // Xóa các bình luận cũ
+      comments.clear(); // Clear previous comments
 
-      // Duyệt qua các tài liệu bình luận và thêm vào danh sách
+      // Iterate over each comment
       for (var doc in snapshot.docs) {
-        // Xử lý trường createdAt để chuyển đổi thành DateTime
         var createdAt = doc['createdAt'];
-        DateTime createdAtDateTime;
+        DateTime createdAtDateTime =
+            (createdAt is Timestamp) ? createdAt.toDate() : DateTime.now();
 
-        if (createdAt is Timestamp) {
-          createdAtDateTime =
-              createdAt.toDate(); // Nếu là Timestamp, chuyển thành DateTime
-        } else if (createdAt is String) {
-          createdAtDateTime =
-              DateTime.parse(createdAt); // Nếu là String, chuyển thành DateTime
-        } else {
-          createdAtDateTime =
-              DateTime.now(); // Nếu không hợp lệ, dùng thời gian hiện tại
-        }
-
-        // Tạo đối tượng Comment và thêm vào danh sách
-        comments.add(Comment(
+        final comment = Comment(
           id: doc.id,
           userName: doc['userName'] ?? '',
           content: doc['content'] ?? '',
           productId: doc['productId'] ?? '',
           userId: doc['userId'] ?? '',
           createdAt: createdAtDateTime,
-        ));
+        );
+
+        comments.add(comment);
+
+        // Fetch user details if not already fetched
+        final userId = comment.userId;
+        if (!userMap.containsKey(userId)) {
+          await _fetchUserDetails(userId); // Fetch user if not already fetched
+        }
       }
 
       isLoadingComments.value = false;
     } catch (e) {
       isLoadingComments.value = false;
       Get.snackbar('Lỗi', 'Không thể tải bình luận: $e');
+    }
+  }
+
+  // Function to fetch user details based on userId
+  Future<void> _fetchUserDetails(String userId) async {
+    try {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+
+      if (userDoc.exists) {
+        UserModel user = UserModel.fromFirestore(userDoc);
+        userMap[userId] = user; // Store the user data in the map
+      }
+    } catch (e) {
+      print('Error fetching user details: $e');
     }
   }
 
@@ -104,7 +116,7 @@ class ProductDetailController extends GetxController {
       if (product.documentId != null && product.documentId!.isNotEmpty) {
         final newComment = Comment(
           id: '', // Firestore sẽ tự động tạo id
-          userName: 'User', // Thay bằng tên người dùng thực tế
+          userName: 'Admin', // Thay bằng tên người dùng thực tế
           content: commentController.text,
           productId: product.documentId!, // Sử dụng documentId của sản phẩm
           userId: 'userId', // Thay bằng ID người dùng thực tế
